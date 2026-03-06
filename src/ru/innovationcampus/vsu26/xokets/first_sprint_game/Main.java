@@ -1,21 +1,15 @@
 package ru.innovationcampus.vsu26.xokets.first_sprint_game;
 
-import java.sql.SQLOutput;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
 
     private static final Random rand = new Random();
-    public static final int START_LOC = 3;
-    public static final String YES_ANSWER = "ДА";
-    public static final String NO_ANSWER = "НЕТ";
-    public static final String PERSON = "🧙‍♀️";
     public static final String MONSTER = "🧟‍♂️";
     public static final String CASTLE = "🏰";
     public static final String VOID = " ";
     public static final int SIZE = 5;
-    public static final int START_LIVES = 3;
 
     private static final String leftBlock = "| ";
     private static final String rightBlock = " | ";
@@ -25,6 +19,7 @@ public class Main {
 
 
     public static void main(String... args) {
+        Person person = new Person(SIZE);
         final String answer;
 
         System.out.println("Готовы ли вы начать игру? (Да/Нет)");
@@ -33,12 +28,9 @@ public class Main {
         switch (answer) {
             case "ДА" -> {
 
-                int xPersonLoc = START_LOC;
-                int yPersonLoc = START_LOC;
                 int step = 0;
                 int yCastleLoc = rand.nextInt(1, SIZE);
                 int xCastleLoc = rand.nextInt(1, SIZE);
-                int personLive = START_LIVES;
 
                 System.out.println("Выберите сложность игры (Введите число от 1 до 5)");
                 int difficulty = input.nextInt();
@@ -50,11 +42,13 @@ public class Main {
                         board[y][x] = VOID;
                     }
                 }
-                board[xPersonLoc][yPersonLoc] = PERSON;
+                board[person.getY()][person.getX()] = Person.ICON;
                 board[xCastleLoc][yCastleLoc] = CASTLE;
-                while (personLive > 0) {
-                    printBoard(board);
-                    if (board[yPersonLoc][xPersonLoc].equals(CASTLE)) {
+                while (person.getLive() > 0) {
+                    printBoard(board, person);
+                    System.out.println("Введите новую координату X (Чтобы ввести Y, оставьте X неизменым)");
+                    input.nextInt(); //Затычка
+                    if (board[person.getY()][person.getX()].equals(CASTLE)) {
                         System.out.println("Вы победили!");
                         step++;
                         System.out.println("Кол-во ходов " + step);
@@ -91,37 +85,21 @@ public class Main {
         }
     }
 
-    private static void printBoard(String[][] board) {
+    private static void printBoard(String[][] board, Person person) {
         for (int y = 0; y < SIZE; y++) {
             System.out.println("\n" + wall);
             System.out.print(leftBlock);
             for (int x = 0; x < SIZE; x++) {
                 switch (board[x][y]) {
                     case VOID -> printSlot();
-                    case PERSON -> printSlot(PERSON);
+                    case Person.ICON -> printSlot(Person.ICON);
                     case MONSTER -> printSlot(MONSTER);
                     case CASTLE -> printSlot(CASTLE);
                 }
             }
         }
         System.out.println("\n" + wall);
-    }
-    private static void move(String[][] board, int xPersonLoc, int yPersonLoc) {
-        //Ввод координат
-        System.out.printf("Введите новое значение для x (текущее: %s)\n", xPersonLoc);
-        int x = input.nextInt();
-        int y = 0;
-        boolean isCorrectX = x >= 0 && x < SIZE && Math.abs(xPersonLoc - x) == 1;
-        boolean isCorrectY = y >= 0 && y < SIZE && Math.abs(yPersonLoc - y) == 1;
-        if (x != xPersonLoc && isCorrectX) {
-            System.out.println("Ход корректный");
-            xPersonLoc = x;
-        } else {
-            System.out.printf("Введите новое значение для y (текущее: %s)\n", yPersonLoc);
-            input.nextInt();
-            if (isCorrectY) {
-
-            }
-        }
+        System.out.println("Жизни: " + person.getLive());
+        System.out.printf("\nX = %s\nY = %s\n", person.getX(), person.getY());
     }
 }
