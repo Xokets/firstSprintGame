@@ -4,11 +4,13 @@ import java.util.Random;
 
 public class Person {
 
-    public static final String ICON = "\uD83E\uDDD9\u200D";
     public static final int START_LIVES = 3;
+    public static final String DEFAULT_PERSON_ICON = "\uD83E\uDDD9\u200D";
 
+    private String icon = DEFAULT_PERSON_ICON;
     private int x;
     private int y;
+
     private int live;
 
     public Person() {
@@ -22,8 +24,8 @@ public class Person {
 
     public Person(int size) {
         Random rand = new Random();
-        this.x = 0;
-        this.y = rand.nextInt(size);
+        this.x = rand.nextInt(size);
+        this.y = 0;
         this.live = START_LIVES;
     }
 
@@ -52,5 +54,13 @@ public class Person {
 
     public int getLive() {
         return live;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

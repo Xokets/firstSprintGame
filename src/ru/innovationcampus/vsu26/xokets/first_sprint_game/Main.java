@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class Main {
 
     private static final Random rand = new Random();
-    public static final String MONSTER = "🧟‍♂️";
     public static final String CASTLE = "🏰";
     public static final String VOID = "  ";
     public static final int SIZE = 5;
@@ -28,8 +27,8 @@ public class Main {
             case "ДА" -> {
 
                 int step = 0;
-                final int yCastleLoc = rand.nextInt(1, SIZE);
-                final int xCastleLoc = rand.nextInt(1, SIZE);
+                final int yCastleLoc = SIZE - 1;
+                final int xCastleLoc = rand.nextInt(0, SIZE);
 
                 System.out.println("Выберите сложность игры (Введите число от 1 до 5)");
                 int difficulty = input.nextInt();
@@ -43,7 +42,7 @@ public class Main {
                 }
                 board[xCastleLoc][yCastleLoc] = CASTLE;
                 while (person.getLive() > 0) {
-                    board[person.getX()][person.getY()] = Person.ICON;
+                    board[person.getX()][person.getY()] = person.getIcon();
                     printBoard(board, person);
                     System.out.println("Введите новую координату X, затем Y");
                     int x = input.nextInt();
@@ -65,10 +64,7 @@ public class Main {
                 }
             }
             case "НЕТ" -> System.out.println("Чем тебе игра-то не угодила? 😡");
-            default -> {
-                System.out.println("Ваш ответ некорректный. Попробуйте ещё раз");
-                main();
-            }
+            default -> System.out.println("Ответ некорректный");
         }
     }
     private static void printSlot(String arg) { System.out.print(arg + rightBlock); }
@@ -94,15 +90,16 @@ public class Main {
     }
 
     private static void printBoard(String[][] board, Person person) {
+
         for (int y = SIZE - 1; y >= 0; y--) {
             System.out.println("\n" + wall);
             System.out.print(leftBlock);
             for (int x = 0; x < SIZE; x++) {
                 switch (board[x][y]) {
                     case VOID -> printSlot();
-                    case Person.ICON -> printSlot(Person.ICON);
-                    case MONSTER -> printSlot(MONSTER);
+                    case Monster.DEFAULT_MONSTER_ICON -> printSlot(Monster.DEFAULT_MONSTER_ICON);
                     case CASTLE -> printSlot(CASTLE);
+                    case Person.DEFAULT_PERSON_ICON -> printSlot(Person.DEFAULT_PERSON_ICON);
                 }
             }
         }
