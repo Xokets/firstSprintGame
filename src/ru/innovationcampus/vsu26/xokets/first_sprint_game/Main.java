@@ -8,14 +8,13 @@ public class Main {
     private static final Random rand = new Random();
     public static final String MONSTER = "🧟‍♂️";
     public static final String CASTLE = "🏰";
-    public static final String VOID = " ";
+    public static final String VOID = "  ";
     public static final int SIZE = 5;
 
+    private static final Scanner input = new Scanner(System.in);
     private static final String leftBlock = "| ";
     private static final String rightBlock = " | ";
     private static final String wall = "+ —— + —— + —— + —— + —— + ";
-
-    private static final Scanner input = new Scanner(System.in);
 
 
     public static void main(String... args) {
@@ -29,46 +28,55 @@ public class Main {
             case "ДА" -> {
 
                 int step = 0;
-                int yCastleLoc = rand.nextInt(1, SIZE);
-                int xCastleLoc = rand.nextInt(1, SIZE);
+                final int yCastleLoc = rand.nextInt(1, SIZE);
+                final int xCastleLoc = rand.nextInt(1, SIZE);
 
                 System.out.println("Выберите сложность игры (Введите число от 1 до 5)");
                 int difficulty = input.nextInt();
                 if (!(difficulty > 0 && difficulty <= 5)) break;
                 System.out.println("Сложность установлена на " + difficulty);
                 String[][] board = new String[SIZE][SIZE];
-                for (int y = 0; y < SIZE; y++) {
-                    for (int x = 0; x < SIZE; x++) {
-                        board[y][x] = VOID;
+                for (int x = 0; x < SIZE; x++) {
+                    for (int y = 0; y < SIZE; y++) {
+                        board[x][y] = VOID;
                     }
                 }
-                board[person.getY()][person.getX()] = Person.ICON;
                 board[xCastleLoc][yCastleLoc] = CASTLE;
                 while (person.getLive() > 0) {
+                    board[person.getX()][person.getY()] = Person.ICON;
                     printBoard(board, person);
-                    System.out.println("Введите новую координату X (Чтобы ввести Y, оставьте X неизменым)");
-                    input.nextInt(); //Затычка
-                    if (board[person.getY()][person.getX()].equals(CASTLE)) {
-                        System.out.println("Вы победили!");
+                    System.out.println("Введите новую координату X, затем Y");
+                    int x = input.nextInt();
+                    int y = input.nextInt();
+                    if (person.isMoveCorrect(x, y)) {
+                        movePersonOnBoard(board, person, x, y);
                         step++;
+                    } else {
+                        System.out.println("Ход некорректный");
+                        continue;
+                    }
+                    if (person.getX() == xCastleLoc && person.getY() == yCastleLoc) {
+                        printBoard(board, person);
+                        System.out.println("Вы победили!");
                         System.out.println("Кол-во ходов " + step);
                         return;
                     }
 
                 }
             }
-            case "НЕТ" -> System.out.println("Чем тебе игра-то не угодила?");
+            case "НЕТ" -> System.out.println("Чем тебе игра-то не угодила? 😡");
             default -> {
-                System.out.println("Ваш ответ некоректный. Попробуйте ещё раз");
+                System.out.println("Ваш ответ некорректный. Попробуйте ещё раз");
                 main();
             }
         }
     }
     private static void printSlot(String arg) { System.out.print(arg + rightBlock); }
-    private static void printSlot() { printSlot("  "); }
+    private static void printSlot() { printSlot(VOID); }
 
-    private static boolean generateMonsterTask(int key) {
-        if (key == 1) {
+    private static boolean generateMonsterTask(int difficulty) {
+        Scanner input = new Scanner(System.in);
+        if (difficulty == 1) {
             int num1 = rand.nextInt(-100, 101);
             int num2 = rand.nextInt(-100, 101);
             int sum = num1 + num2;
@@ -86,7 +94,7 @@ public class Main {
     }
 
     private static void printBoard(String[][] board, Person person) {
-        for (int y = 0; y < SIZE; y++) {
+        for (int y = SIZE - 1; y >= 0; y--) {
             System.out.println("\n" + wall);
             System.out.print(leftBlock);
             for (int x = 0; x < SIZE; x++) {
@@ -101,5 +109,9 @@ public class Main {
         System.out.println("\n" + wall);
         System.out.println("Жизни: " + person.getLive());
         System.out.printf("\nX = %s\nY = %s\n", person.getX(), person.getY());
+    }
+    private static void movePersonOnBoard(String[][] board, Person person, int x, int y) {
+        board[person.getX()][person.getY()] = VOID;
+        person.move(x, y);
     }
 }

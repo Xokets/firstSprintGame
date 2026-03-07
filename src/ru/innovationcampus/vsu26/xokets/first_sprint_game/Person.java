@@ -28,12 +28,12 @@ public class Person {
     }
 
     public void move(int x, int y) {
-            this.x = x;
-            this.y = y;
+        this.x = x;
+        this.y = y;
     }
 
-    public boolean isCorrectMove(int x, int y) {
-        return this.x == x && Math.abs(this.y - y) == 1 || this.y == y && Math.abs(this.x - x) == 1;
+    public boolean isMoveCorrect(int x, int y) {
+        return (Math.abs(this.x - x) == 1 && this.y == y) || (Math.abs(this.y - y) == 1 && this.x == x);
     }
 
     public void hit() {
