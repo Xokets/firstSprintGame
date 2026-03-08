@@ -9,6 +9,7 @@ public class Main {
     public static final String CASTLE = "🏰";
     public static final String VOID = "  ";
     public static final int SIZE = 5;
+    public static final int COUNT_OF_MONSTERS_MULTIPLIER = 2;
 
     private static final Scanner input = new Scanner(System.in);
     private static final String LEFT_BLOCK = "| ";
@@ -19,6 +20,7 @@ public class Main {
 
 
     public static void main(String... args) {
+        final int monstersCount = SIZE * COUNT_OF_MONSTERS_MULTIPLIER;
         Person person = new Person(SIZE);
         final String answer;
 
@@ -43,6 +45,9 @@ public class Main {
                     }
                 }
                 board[xCastleLoc][yCastleLoc] = CASTLE;
+                Monster[] monsters = new Monster[monstersCount];
+                
+
                 while (person.getLive() > 0) {
                     board[person.getX()][person.getY()] = person.getIcon();
                     printBoard(board, person);
@@ -72,25 +77,6 @@ public class Main {
     private static void printSlot(String arg) { System.out.print(arg + RIGHT_BLOCK); }
     private static void printSlot() { printSlot(VOID); }
 
-    private static boolean generateMonsterTask(int difficulty) {
-        Scanner input = new Scanner(System.in);
-        if (difficulty == 1) {
-            int num1 = rand.nextInt(-100, 101);
-            int num2 = rand.nextInt(-100, 101);
-            int sum = num1 + num2;
-            System.out.println("Реши пример: " + num1 + " + " + num2 + " = ?");
-            int answer = input.nextInt();
-            if (sum == answer) {
-                System.out.println("Верно! Ты победил монстра");
-                return true;
-            }
-            System.out.println("Ты проиграл эту битву!");
-            return false;
-        } else {
-            return false;
-        }
-    }
-
     private static void printBoard(String[][] board, Person person) {
 
         for (int y = SIZE - 1; y >= 0; y--) {
@@ -100,6 +86,7 @@ public class Main {
                 switch (board[x][y]) {
                     case VOID -> printSlot();
                     case Monster.DEFAULT_MONSTER_ICON -> printSlot(Monster.DEFAULT_MONSTER_ICON);
+                    case BigMonster.DEFAULT_BIG_MONSTER_ICON -> printSlot(BigMonster.DEFAULT_BIG_MONSTER_ICON);
                     case CASTLE -> printSlot(CASTLE);
                     case Person.DEFAULT_PERSON_ICON -> printSlot(Person.DEFAULT_PERSON_ICON);
                 }
