@@ -11,9 +11,11 @@ public class Main {
     public static final int SIZE = 5;
 
     private static final Scanner input = new Scanner(System.in);
-    private static final String leftBlock = "| ";
-    private static final String rightBlock = " | ";
-    private static final String wall = "+ —— + —— + —— + —— + —— + ";
+    private static final String LEFT_BLOCK = "| ";
+    private static final String RIGHT_BLOCK = " | ";
+    private static final String WALL = "+ —— + —— + —— + —— + —— + ";
+
+    private static final String INVALID_TURN = "Ход некорректный";
 
 
     public static void main(String... args) {
@@ -48,10 +50,10 @@ public class Main {
                     int x = input.nextInt();
                     int y = input.nextInt();
                     if (person.isMoveCorrect(x, y)) {
-                        movePersonOnBoard(board, person, x, y);
+                        if (!movePersonOnBoard(board, person, x, y)) { System.out.println(INVALID_TURN); continue; }
                         step++;
                     } else {
-                        System.out.println("Ход некорректный");
+                        System.out.println(INVALID_TURN);
                         continue;
                     }
                     if (person.getX() == xCastleLoc && person.getY() == yCastleLoc) {
@@ -67,7 +69,7 @@ public class Main {
             default -> System.out.println("Ответ некорректный");
         }
     }
-    private static void printSlot(String arg) { System.out.print(arg + rightBlock); }
+    private static void printSlot(String arg) { System.out.print(arg + RIGHT_BLOCK); }
     private static void printSlot() { printSlot(VOID); }
 
     private static boolean generateMonsterTask(int difficulty) {
@@ -92,8 +94,8 @@ public class Main {
     private static void printBoard(String[][] board, Person person) {
 
         for (int y = SIZE - 1; y >= 0; y--) {
-            System.out.println("\n" + wall);
-            System.out.print(leftBlock);
+            System.out.println("\n" + WALL);
+            System.out.print(LEFT_BLOCK);
             for (int x = 0; x < SIZE; x++) {
                 switch (board[x][y]) {
                     case VOID -> printSlot();
@@ -103,12 +105,16 @@ public class Main {
                 }
             }
         }
-        System.out.println("\n" + wall);
+        System.out.println("\n" + WALL);
         System.out.println("Жизни: " + person.getLive());
         System.out.printf("\nX = %s\nY = %s\n", person.getX(), person.getY());
     }
-    private static void movePersonOnBoard(String[][] board, Person person, int x, int y) {
+    private static boolean movePersonOnBoard(String[][] board, Person person, int x, int y) {
         board[person.getX()][person.getY()] = VOID;
-        person.move(x, y);
+        if (x > 0 && x < SIZE && y > 0 && y < SIZE) {
+            person.move(x, y);
+            return true;
+        }
+        return false;
     }
 }
