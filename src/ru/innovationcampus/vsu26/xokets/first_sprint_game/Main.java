@@ -3,10 +3,8 @@ package ru.innovationcampus.vsu26.xokets.first_sprint_game;
 import ru.innovationcampus.vsu26.xokets.first_sprint_game.monster.BigMonster;
 import ru.innovationcampus.vsu26.xokets.first_sprint_game.monster.Monster;
 
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
 
@@ -14,7 +12,6 @@ public class Main {
     public static final String CASTLE = "🏰";
     public static final String VOID = "  ";
     public static final int SIZE = 5;
-    public static final int COUNT_OF_MONSTERS_MULTIPLIER = 2;
 
     private static final Scanner input = new Scanner(System.in);
     private static final String LEFT_BLOCK = "| ";
@@ -25,7 +22,7 @@ public class Main {
 
 
     public static void main(String... args) {
-        final int monstersCount = SIZE * COUNT_OF_MONSTERS_MULTIPLIER;
+        final int monstersCount = SIZE * SIZE - SIZE - 5;
         Person person = new Person(SIZE);
         final String answer;
 
@@ -55,10 +52,12 @@ public class Main {
                 for (int i = 0; i < monstersCount; i++) {
                     if (rand.nextInt(3) < 2) {
                         test = new Monster(SIZE);
+                        if (!(board[test.getX()][test.getY()].equals(VOID))) continue;
                         monsters[i] = test;
                         board[test.getX()][test.getY()] = Monster.DEFAULT_MONSTER_ICON;
                     } else {
                         test = new BigMonster(SIZE);
+                        if (!(board[test.getX()][test.getY()].equals(VOID))) continue;
                         monsters[i] = test;
                         board[test.getX()][test.getY()] = BigMonster.DEFAULT_BIG_MONSTER_ICON;
                     }
@@ -71,8 +70,11 @@ public class Main {
                     int x = input.nextInt();
                     int y = input.nextInt();
                     if (person.isMoveCorrect(x, y)) {
-                        if (!movePersonOnBoard(board, person, x, y)) { System.out.println(INVALID_TURN); continue; }
-                        step++;
+                        if (board[x][y].equals(VOID)) {
+                            movePersonOnBoard(board, person, x, y);
+                            step++;
+                            continue;
+                        }
                     }
                     if (person.getX() == xCastleLoc && person.getY() == yCastleLoc) {
                         printBoard(board, person);
@@ -81,10 +83,23 @@ public class Main {
                         return;
                     }
                     for (Monster monster : monsters) {
-                        if (!(person.getX() == monster.getX() && person.getY() == monster.getY())) continue;
-                        if (!(monster.generateMonsterTask(difficulty))) person.hit();
+                        if (!person.isMoveCorrect(x, y)) {
+                            System.out.println(INVALID_TURN);
+                            break;
+                        }
+                        if (monster == null) continue;
+                        if (monster.isDefeated()) continue;
+                        if (!(monster.conflictPerson(x, y))) continue;
+                        if (!(monster.generateMonsterTask(difficulty))) {
+                            person.hit();
+                            break;
+                        }
+                        movePersonOnBoard(board, person, x, y);
+
+                        break;
                     }
                 }
+                System.out.println("Вы погибли!");
             }
             case "НЕТ" -> System.out.println("Чем тебе игра-то не угодила? 😡");
             default -> System.out.println("Ответ некорректный");
@@ -112,12 +127,12 @@ public class Main {
         System.out.println("Жизни: " + person.getLive());
         System.out.printf("\nX = %s\nY = %s\n", person.getX(), person.getY());
     }
-    private static boolean movePersonOnBoard(String[][] board, Person person, int x, int y) {
+    private static void movePersonOnBoard(String[][] board, Person person, int x, int y) {
         board[person.getX()][person.getY()] = VOID;
         if (x >= 0 && x < SIZE && y >= 0 && y < SIZE) {
             person.move(x, y);
-            return true;
+        } else {
+            System.out.println(INVALID_TURN);
         }
-        return false;
     }
 }

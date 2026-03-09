@@ -15,6 +15,7 @@ public class Monster {
     protected int x;
     protected int y;
     protected String icon = DEFAULT_MONSTER_ICON;
+    protected boolean isDefeated = false;
 
     public Monster(int x, int y) {
         this.x = x;
@@ -46,6 +47,14 @@ public class Monster {
         this.icon = icon;
     }
 
+    public boolean conflictPerson(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+
+    public boolean isDefeated() {
+        return isDefeated;
+    }
+
     public boolean generateMonsterTask(int key) {
         Scanner input = new Scanner(System.in);
         int num1 = rand.nextInt(-100, 101);
@@ -55,6 +64,7 @@ public class Monster {
         int answer = input.nextInt();
         if (sum == answer) {
             System.out.println(WIN_MESSAGE);
+            isDefeated = true;
             return true;
         }
         System.out.println(LOSE_MESSAGE);
