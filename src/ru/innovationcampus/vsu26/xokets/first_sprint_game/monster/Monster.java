@@ -1,4 +1,4 @@
-package ru.innovationcampus.vsu26.xokets.first_sprint_game;
+package ru.innovationcampus.vsu26.xokets.first_sprint_game.monster;
 
 import java.util.Random;
 import java.util.Scanner;

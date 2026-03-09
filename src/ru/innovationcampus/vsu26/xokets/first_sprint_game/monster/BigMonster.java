@@ -1,4 +1,4 @@
-package ru.innovationcampus.vsu26.xokets.first_sprint_game;
+package ru.innovationcampus.vsu26.xokets.first_sprint_game.monster;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class BigMonster extends Monster {
 
     public static final String DEFAULT_BIG_MONSTER_ICON = "\uD83E\uDDDB";
-    private final double EPSILON = 0.1;
+    private static final double EPSILON = 0.1;
 
     public BigMonster(int x, int y) {
         super(x, y);
@@ -21,7 +21,6 @@ public class BigMonster extends Monster {
         super(boardSize);
         icon = DEFAULT_BIG_MONSTER_ICON;
     }
-
     @Override
     public boolean generateMonsterTask(int key) {
         Random rand = new Random();
