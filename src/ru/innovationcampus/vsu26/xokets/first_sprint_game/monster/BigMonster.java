@@ -1,7 +1,6 @@
 package ru.innovationcampus.vsu26.xokets.first_sprint_game.monster;
 
 import java.util.Locale;
-import java.util.Random;
 import java.util.Scanner;
 
 public class BigMonster extends Monster {
@@ -24,7 +23,6 @@ public class BigMonster extends Monster {
 
     @Override
     public boolean generateMonsterTask(int key) {
-        Random rand = new Random();
         Scanner input = new Scanner(System.in);
         input.useLocale(Locale.US);
         switch (key) {

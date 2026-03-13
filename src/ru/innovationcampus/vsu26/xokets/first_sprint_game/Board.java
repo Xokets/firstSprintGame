@@ -2,6 +2,7 @@ package ru.innovationcampus.vsu26.xokets.first_sprint_game;
 
 import ru.innovationcampus.vsu26.xokets.first_sprint_game.monster.BigMonster;
 import ru.innovationcampus.vsu26.xokets.first_sprint_game.monster.Monster;
+import ru.innovationcampus.vsu26.xokets.first_sprint_game.monster.SmallMonster;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -20,11 +21,11 @@ public class Board {
 
     private static final String INVALID_TURN = "Ход некорректный";
 
-    private int size;
+    private final int size;
     private int step;
     private int castleX;
     private int castleY;
-    private String[][] board;
+    private final String[][] board;
 
     public Board() {
         this(DEFAULT_SIZE);
@@ -60,17 +61,24 @@ public class Board {
         //Добавление монстров в массив
         Monster[] monsters = new Monster[monstersCount];
         Monster test;
+        int monsterTurn;
         for (int i = 0; i < monstersCount; i++) {
-            if (rand.nextInt(3) < 2) {
+            monsterTurn = rand.nextInt(6);
+            if (monsterTurn <= 3) {
                 test = new Monster(size);
                 if (!(board[test.getX()][test.getY()].equals(VOID))) continue;
                 monsters[i] = test;
                 board[test.getX()][test.getY()] = Monster.DEFAULT_MONSTER_ICON;
-            } else {
+            } else if (monsterTurn == 4) {
                 test = new BigMonster(size);
                 if (!(board[test.getX()][test.getY()].equals(VOID))) continue;
                 monsters[i] = test;
                 board[test.getX()][test.getY()] = BigMonster.DEFAULT_BIG_MONSTER_ICON;
+            } else {
+                test = new SmallMonster(size);
+                if (!(board[test.getX()][test.getY()].equals(VOID))) continue;
+                monsters[i] = test;
+                board[test.getX()][test.getY()] = SmallMonster.DEFAULT_SMALL_MONSTER_ICON;
             }
         }
 
@@ -82,9 +90,14 @@ public class Board {
             System.out.println("Y = " + person.getY());
             int x = input.nextInt();
             int y = input.nextInt();
+
+            if (x < 0 || y < 0 || x > size || y > size) {
+                System.out.println(INVALID_TURN);
+                continue;
+            }
             if (person.isMoveCorrect(x, y)) {
                 if (board[x][y].equals(VOID)) {
-                    movePersonOnBoard(size, board, person, x, y);
+                    movePersonOnBoard(person, x, y);
                     step++;
                     continue;
                 }
@@ -107,7 +120,7 @@ public class Board {
                     person.hit();
                     break;
                 }
-                movePersonOnBoard(size, board, person, x, y);
+                movePersonOnBoard(person, x, y);
 
                 break;
             }
@@ -134,6 +147,7 @@ public class Board {
                     case VOID -> printSlot();
                     case Monster.DEFAULT_MONSTER_ICON -> printSlot(Monster.DEFAULT_MONSTER_ICON);
                     case BigMonster.DEFAULT_BIG_MONSTER_ICON -> printSlot(BigMonster.DEFAULT_BIG_MONSTER_ICON);
+                    case SmallMonster.DEFAULT_SMALL_MONSTER_ICON -> printSlot(SmallMonster.DEFAULT_SMALL_MONSTER_ICON);
                     case CASTLE -> printSlot(CASTLE);
                     case Person.DEFAULT_PERSON_ICON -> printSlot(Person.DEFAULT_PERSON_ICON);
                 }
@@ -143,7 +157,7 @@ public class Board {
         System.out.println("Жизни: " + person.getLive());
     }
 
-    private static void movePersonOnBoard(int size, String[][] board, Person person, int x, int y) {
+    private void movePersonOnBoard(Person person, int x, int y) {
         board[person.getX()][person.getY()] = VOID;
         if (x >= 0 && x < size && y >= 0 && y < size) {
             person.move(x, y);
