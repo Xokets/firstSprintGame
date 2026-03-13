@@ -31,7 +31,7 @@ public class Main {
         answer = input.nextLine().toUpperCase();
         switch (answer) {
             case "ДА" -> {
-                Board board = new Board();
+                Board board = new Board(SIZE);
                 board.game(1);
 //
 //                int step = 0;

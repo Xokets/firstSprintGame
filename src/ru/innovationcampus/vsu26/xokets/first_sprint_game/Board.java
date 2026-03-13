@@ -3,6 +3,7 @@ package ru.innovationcampus.vsu26.xokets.first_sprint_game;
 import ru.innovationcampus.vsu26.xokets.first_sprint_game.monster.BigMonster;
 import ru.innovationcampus.vsu26.xokets.first_sprint_game.monster.Monster;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -21,8 +22,8 @@ public class Board {
 
     private int size;
     private int step;
-    private final int castleY = size - 1;
-    private final int castleX = rand.nextInt(0, size);
+    private int castleX;
+    private int castleY;
     private String[][] board;
 
     public Board() {
@@ -33,6 +34,8 @@ public class Board {
         this.size = size;
         step = 0;
         board = new String[size][size];
+        castleY = size - 1;
+        castleX = rand.nextInt(0, size);
     }
 
     public int getSize() {
@@ -45,15 +48,14 @@ public class Board {
         final Person person = new Person(size);
         final int monstersCount = size * size - size - 5;
 
-        board[castleX][castleY] = CASTLE;
-
         //Заполнение массива "пустотой"
-        String[][] board = new String[size][size];
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 board[x][y] = VOID;
             }
         }
+
+        board[castleX][castleY] = CASTLE;
 
         //Добавление монстров в массив
         Monster[] monsters = new Monster[monstersCount];
@@ -76,6 +78,8 @@ public class Board {
             board[person.getX()][person.getY()] = person.getIcon();
             printBoard(person);
             System.out.println("Введите новую координату X, затем Y");
+            System.out.println("X = " + person.getX());
+            System.out.println("Y = " + person.getY());
             int x = input.nextInt();
             int y = input.nextInt();
             if (person.isMoveCorrect(x, y)) {
@@ -85,7 +89,7 @@ public class Board {
                     continue;
                 }
             }
-            if (person.getX() == castleX && person.getY() == castleY) {
+            if (x == castleX && y == castleY) {
                 printBoard(person);
                 System.out.println("Вы победили!");
                 System.out.println("Кол-во ходов " + step);
