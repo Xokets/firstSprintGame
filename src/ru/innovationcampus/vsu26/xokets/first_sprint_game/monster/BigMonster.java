@@ -1,6 +1,5 @@
 package ru.innovationcampus.vsu26.xokets.first_sprint_game.monster;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
