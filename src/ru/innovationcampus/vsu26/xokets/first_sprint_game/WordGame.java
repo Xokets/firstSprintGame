@@ -10,11 +10,10 @@ public class WordGame {
     private static final List<String> words = new ArrayList<>();
     private static final Random rand = new Random();
     public static final short RIGHT_ANSWERS_COUNT = 5;
+    public static final int TIME_TO_SHOW = 285;
 
     public static boolean start() {
-
-        Scanner input = new Scanner(System.in);
-
+        final Scanner input = new Scanner(System.in);
         words.add("Thread");
         words.add("transient");
         words.add("int");
@@ -37,24 +36,25 @@ public class WordGame {
 
         int rightAnswers = 0;
         int wrongAnswers = 0;
-        String word;
         while (rightAnswers < RIGHT_ANSWERS_COUNT) {
-            word = words.get(rand.nextInt(words.size()));
-            System.out.println("Введите слово: \"" + word + "\"");
-            String answer = input.nextLine();
+            final String word = words.get(rand.nextInt(words.size()));
+            System.out.println(word);
+            try {
+                Thread.sleep(TIME_TO_SHOW);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            String answer;
+            System.out.println("Введите слово, которое было показано");
+            answer = input.nextLine();
             if (word.equals(answer)) {
                 rightAnswers++;
             } else {
                 wrongAnswers++;
             }
         }
-        try {
-            if ((rightAnswers / wrongAnswers) > 1) {
-                return true;
-            }
-        } catch (ArithmeticException e) {
-            return true;
-        }
+        if (rightAnswers > wrongAnswers) return true;
         return false;
     }
 }

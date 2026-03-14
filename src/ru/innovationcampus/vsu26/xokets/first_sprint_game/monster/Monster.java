@@ -59,11 +59,12 @@ public class Monster {
 
     public boolean generateMonsterTask(int key) {
         Scanner input = new Scanner(System.in);
-        WordGame.start();
-        System.out.println(WIN_MESSAGE);
-        isDefeated = true;
-        return true;
-//        System.out.println(LOSE_MESSAGE);
-//        return false;
+        if (WordGame.start()) {
+            System.out.println(WIN_MESSAGE);
+            isDefeated = true;
+            return true;
+        }
+        System.out.println(LOSE_MESSAGE);
+        return false;
     }
 }
