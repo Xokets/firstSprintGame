@@ -41,33 +41,6 @@ public class BigMonster extends Monster {
                 return false;
             }
             case 2 -> {
-                int num1 = rand.nextInt(-200, 201);
-                int num2 = rand.nextInt(1, 201);
-                final double result = (double) num1 / num2;
-                System.out.printf("Реши пример: %s : %s = ? (Ответ округли до целых)\n", num1, num2);
-                double answer = input.nextInt();
-                if (answer == (int) Math.round(result)) {
-                    System.out.println(WIN_MESSAGE);
-                    isDefeated = true;
-                    return true;
-                }
-                System.out.println(LOSE_MESSAGE);
-                return false;
-            }
-            case 3 -> {
-                final int result = rand.nextInt(100, 301);
-                int num = result * result;
-                System.out.printf("Реши пример: √%s = ?\n", num);
-                int answer = input.nextInt();
-                if (answer == result) {
-                    System.out.println(WIN_MESSAGE);
-                    isDefeated = true;
-                    return true;
-                }
-                System.out.println(LOSE_MESSAGE);
-                return false;
-            }
-            case 4 -> {
                 int a = rand.nextInt(-1_000, 1_001);
                 int b = rand.nextInt(-1_000, 1_001);
                 final int result = a - b;
@@ -81,7 +54,7 @@ public class BigMonster extends Monster {
                 System.out.println(LOSE_MESSAGE);
                 return false;
             }
-            case 5 -> {
+            case 3 -> {
                 int a = rand.nextInt(-1_000, 1_001);
                 int b = rand.nextInt(-1_000, 1_001);
                 int c = rand.nextInt(-10, 11);
@@ -96,7 +69,34 @@ public class BigMonster extends Monster {
                 System.out.println(LOSE_MESSAGE);
                 return false;
             }
+            case 4 -> {
+                int num1 = rand.nextInt(-200, 201);
+                int num2 = rand.nextInt(1, 201);
+                final double result = (double) num1 / num2;
+                System.out.printf("Реши пример: %s : %s = ? (Ответ округли до целых)\n", num1, num2);
+                double answer = input.nextInt();
+                if (answer == (int) Math.round(result)) {
+                    System.out.println(WIN_MESSAGE);
+                    isDefeated = true;
+                    return true;
+                }
+                System.out.println(LOSE_MESSAGE);
+                return false;
+            }
+            case 5 -> {
+                final int result = rand.nextInt(100, 301);
+                int num = result * result;
+                System.out.printf("Реши пример: √%s = ?\n", num);
+                int answer = input.nextInt();
+                if (answer == result) {
+                    System.out.println(WIN_MESSAGE);
+                    isDefeated = true;
+                    return true;
+                }
+                System.out.println(LOSE_MESSAGE);
+                return false;
+            }
         }
-        throw new IllegalStateException("Ошибка валидации уровня сложности");
+        throw new IllegalArgumentException("Ошибка валидации уровня сложности");
     }
 }

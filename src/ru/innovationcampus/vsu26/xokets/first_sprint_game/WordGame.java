@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.BrokenBarrierException;
 
 public class WordGame {
 
-    private static final List<String> words = new ArrayList<>();
-    private static final Random rand = new Random();
-    public static final short RIGHT_ANSWERS_COUNT = 5;
-    public static final int TIME_TO_SHOW = 285;
+    private final List<String> words = new ArrayList<>();
 
-    public static boolean start() {
+    private static final Random rand = new Random();
+
+    public static final short RIGHT_ANSWERS_COUNT = 3;
+    public static final long TIME_TO_SHOW = 250L;
+
+    public boolean start() {
         final Scanner input = new Scanner(System.in);
         words.add("Thread");
         words.add("transient");
@@ -33,6 +36,15 @@ public class WordGame {
         words.add("File");
         words.add("InputStreamReader");
         words.add("IOException");
+        words.add("abstract");
+        words.add("implements");
+        words.add("public static void main (String[] args)");
+        words.add("BrokenBarrierException");
+        words.add("switch");
+        words.add("ExecutorService");
+        words.add("extends");
+        words.add("synchronized");
+        words.add("volatile");
 
         int rightAnswers = 0;
         int wrongAnswers = 0;
@@ -44,17 +56,21 @@ public class WordGame {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            System.out.println("\n\n\n\n\n\nЧитерить плохо\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
             String answer;
             System.out.println("Введите слово, которое было показано");
             answer = input.nextLine();
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             if (word.equals(answer)) {
                 rightAnswers++;
             } else {
                 wrongAnswers++;
             }
         }
-        if (rightAnswers > wrongAnswers) return true;
-        return false;
+        return rightAnswers > wrongAnswers;
     }
 }

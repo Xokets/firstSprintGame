@@ -23,9 +23,8 @@ public class Board {
 
     private final int size;
     private int step;
-    private int castleX;
-    private int castleY;
     private final String[][] board;
+    private Person person;
 
     public Board() {
         this(DEFAULT_SIZE);
@@ -35,8 +34,7 @@ public class Board {
         this.size = size;
         step = 0;
         board = new String[size][size];
-        castleY = size - 1;
-        castleX = rand.nextInt(0, size);
+        person = new Person(size);
     }
 
     public int getSize() {
@@ -45,17 +43,19 @@ public class Board {
 
     public void game(int difficulty) {
 
-        //Объявление нужных переменных
-        final Person person = new Person(size);
+        //Координаты замка
+        final int castleX = rand.nextInt(size);
+        final int castleY = size - 1;
+
+        //Определение количества монстров
         final int monstersCount = size * size - size - 5;
 
-        //Заполнение массива "пустотой"
+        //Заполнение массива "пустотой" и добавление замка
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 board[x][y] = VOID;
             }
         }
-
         board[castleX][castleY] = CASTLE;
 
         //Добавление монстров в массив
@@ -103,9 +103,10 @@ public class Board {
                 }
             }
             if (x == castleX && y == castleY) {
-                printBoard(person);
+                step++;
                 System.out.println("Вы победили!");
                 System.out.println("Кол-во ходов " + step);
+                clear();
                 return;
             }
             for (Monster monster : monsters) {
@@ -121,12 +122,12 @@ public class Board {
                     break;
                 }
                 movePersonOnBoard(person, x, y);
-
+                step++;
                 break;
             }
         }
         System.out.println("Вы погибли!");
-
+        clear();
     }
 
     private static void printSlot(String arg) {
@@ -164,5 +165,14 @@ public class Board {
         } else {
             System.out.println(INVALID_TURN);
         }
+    }
+    private void clear() {
+        step = 0;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                board[x][y] = null;
+            }
+        }
+        person = null;
     }
 }
